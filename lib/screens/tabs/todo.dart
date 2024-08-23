@@ -28,7 +28,6 @@ class Todo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildTodoState(),
-                updateTodo(context),
               ],
             ),
           ],
@@ -74,18 +73,6 @@ class Todo extends StatelessWidget {
     child: Icon(Icons.done, color: Colors.white, size: 15,),
   );
 
-  updateTodo(BuildContext context) => InkWell(
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      child: Icon(Icons.edit, color: Colors.white, size: 15,),
-    ),
-    onTap: (){
-      Navigator.of(context).pushNamed(UpdateTodo.routName);
-    },
-  );
+
 
 }

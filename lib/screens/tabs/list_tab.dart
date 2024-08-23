@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app/screens/tabs/todo.dart';
+import 'package:todo_app/screens/tabs/update_todo.dart';
+import 'package:todo_app/utils/args.dart';
 import 'package:todo_app/utils/date_time_extension.dart';
 import '../../models/todo_dm.dart';
 import '../../models/user_dm.dart';
@@ -39,9 +42,9 @@ class ListTabState extends State<ListTab> {
               itemCount: todosList.length,
               itemBuilder: (context, index) {
                 return Dismissible(
-                  key: UniqueKey(),
                   //todosList[index].id.toString()
-                  direction: DismissDirection.startToEnd,
+                  key: UniqueKey(),
+                  //ValueKey(todosList[index].id.toString()),
                   background: Container(
                     height: 365,
                     width: 200,
@@ -54,23 +57,26 @@ class ListTabState extends State<ListTab> {
                       ],
                     ),
                   ),
-                  confirmDismiss: (direction){
-                    return showDialog(context: context,
-                        builder: (ctx)=> AlertDialog(
-                          content: const Text('Delete this item?'),
-                          actions: [
-                            TextButton(onPressed: (){
-                              Navigator.of(ctx).pop(false);
-                            }, child: Text('no')),
-                            TextButton(onPressed: (){
-                              Navigator.of(ctx).pop(true);
-                            }, child: Text('yes'))
-                          ],
-                        ),
-                    );
-                  },
+                  secondaryBackground: Container(
+                    height: 365,
+                    width: 200,
+                    color: Colors.green,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.edit , color: Colors.white,size: 60,),
+                        Text('Edit')
+                      ],
+                    ),
+                  ),
                   onDismissed: (direction){
-                    deleteTodosListInFireStore();
+                    if(direction == DismissDirection.startToEnd){
+                      deleteTodosListInFireStore(todosList[index].id);
+                    }
+                    else if(direction == DismissDirection.endToStart){
+                      Navigator.of(context).pushNamed(UpdateTodo.routName,
+                          arguments: arg(todosList[index].id ,getTodosListFromFireStore(), todosList));
+                    }
                     },
                   child: Todo(
                     item: todosList[index],
@@ -103,19 +109,18 @@ class ListTabState extends State<ListTab> {
   }
 
 
-  void deleteTodosListInFireStore() async{
+  void deleteTodosListInFireStore(String id) async{
     CollectionReference todosCollection = await FirebaseFirestore.instance
         .collection(UserDM.collectionName)
         .doc(UserDM.currentUser!.id)
         .collection(TodoDM.collectionName);
-    DocumentReference doc = todosCollection.doc();
+    DocumentReference doc = todosCollection.doc(id);
     doc.delete().then(
           (doc) => print("Document deleted"),
       onError: (e) => print("Error updating document $e"),
     );
+    return getTodosListFromFireStore();
 
-
-    setState(() {});
     }
 
 
@@ -179,4 +184,8 @@ class ListTabState extends State<ListTab> {
   }
 
   void onDateTapped() {}
+}
+
+class UpdateBottomSheet {
+  const UpdateBottomSheet();
 }

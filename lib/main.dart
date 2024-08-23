@@ -6,7 +6,7 @@ import 'package:todo_app/screens/auth/register.dart';
 import 'package:todo_app/screens/home.dart';
 import 'package:todo_app/screens/tabs/update_todo.dart';
 import 'package:todo_app/utils/app_theme.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ void main() async {
         projectId: "todo-app-8b8f3"),
   );
   FirebaseFirestore.instance.settings =
-      Settings(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+      const Settings(cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
   runApp(const MyApp());
 }
 
