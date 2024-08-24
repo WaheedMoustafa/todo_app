@@ -100,20 +100,20 @@ class _TodoState extends State<Todo> {
 
 
 
-  buildTodoState() => ElevatedButton(
-    onPressed: (){
-      },
-
-    child: Container(
-      decoration: BoxDecoration(
-        color: AppColors.primary ,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      child: const Icon(Icons.done, color: Colors.white, size: 15,),
-    ),
-  //
-  );
+ // buildTodoState() => ElevatedButton(
+ //   onPressed: (){
+ //     },
+//
+ //   child: Container(
+ //     decoration: BoxDecoration(
+ //       color: AppColors.primary ,
+ //       borderRadius: BorderRadius.circular(16),
+ //     ),
+ //     padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+ //     child: const Icon(Icons.done, color: Colors.white, size: 15,),
+ //   ),
+ // //
+ // );
 
 
 }
