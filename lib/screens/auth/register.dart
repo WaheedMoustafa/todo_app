@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/extension/extension.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import '../../models/user_dm.dart';
+import '../../utils/app_colors.dart';
 import '../../utils/constant.dart';
 import '../../utils/dialog_utils.dart';
 import '../home.dart';
@@ -19,13 +23,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String email = "";
   String password = "";
   String username = "";
+   late ThemeProvider themeProvider;
 
   @override
   Widget build(BuildContext context) {
+      themeProvider=Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Register"),
+        title:  Text(context.appLocalizations.register),
       ),
       body: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -36,22 +42,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: MediaQuery.of(context).size.height * .25,
               ),
               TextFormField(
+                style: TextStyle(color: themeProvider.isDarkThemeEnabled? AppColors.white:AppColors.black),
                 onChanged: (text) {
                   username = text;
                 },
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   label: Text(
-                    "user name",
+                    context.appLocalizations.userName,
+                    style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                   ),
                 ),
               ),
               TextFormField(
+                style: TextStyle(color: themeProvider.isDarkThemeEnabled? AppColors.white:AppColors.black),
                 onChanged: (text) {
                   email = text;
+
                 },
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   label: Text(
-                    "Email",
+                    context.appLocalizations.email,
+                    style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                   ),
                 ),
               ),
@@ -59,12 +70,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 8,
               ),
               TextFormField(
+                style: TextStyle(color: themeProvider.isDarkThemeEnabled? AppColors.white:AppColors.black),
                 onChanged: (text) {
                   password = text;
                 },
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   label: Text(
-                    "Password",
+                    context.appLocalizations.pass,
+                    style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                   ),
                 ),
               ),
@@ -75,13 +88,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     signUp();
                   },
-                  child: const Padding(
+                  child:  Padding(
                     padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                     child: Row(
                       children: [
                         Text(
-                          "Create account",
-                          style: TextStyle(fontSize: 18),
+                          context.appLocalizations.createAccount,
+                          style: TextStyle(fontSize: 18,color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                         ),
                         Spacer(),
                         Icon(Icons.arrow_forward)
@@ -112,25 +125,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } on FirebaseAuthException catch (authError) {
       String message;
-      if (authError.code == 'weak-password') {
-        message = "The password provided is too weak.";
-      } else if (authError.code == 'email-already-in-use') {
-        message = "The account already exists for that email.";
+      if (authError.code == context.appLocalizations.weak_password) {
+        message =  context.appLocalizations.thePasswordProvidedIsTooWeak;
+      } else if (authError.code ==  context.appLocalizations.email_already_in_use) {
+        message =  context.appLocalizations.theAccountAlreadyExistsForThatEmail;
       } else {
         message = Constants.defaultErrorMessage;
       }
       if (context.mounted) {
         hideLoading(context);
         showMessage(context,
-            title: "Error", body: message, posButtonTitle: "ok");
+            title: context.appLocalizations.error, body: message, posButtonTitle:  context.appLocalizations.ok);
       }
     } catch (e) {
       if (context.mounted) {
         hideLoading(context);
         showMessage(context,
-            title: "Error",
+            title: context.appLocalizations.error,
             body: Constants.defaultErrorMessage,
-            posButtonTitle: "ok");
+            posButtonTitle: context.appLocalizations.ok);
       }
     }
   }

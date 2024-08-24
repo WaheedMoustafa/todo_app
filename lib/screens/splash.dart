@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:todo_app/screens/home.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/providers/language_provider.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import 'package:todo_app/utils/app_images.dart';
+import 'auth/login.dart';
 
 
 
@@ -18,16 +21,20 @@ class _SplashScrState extends State<SplashScr> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), (){
-      Navigator.pushReplacementNamed(context, Home.routeName);
+    Future.delayed(const Duration(seconds: 2), (){
+      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
     } );
   }
+  late ThemeProvider themeProvider ;
+  late LanguageProvider languageProvider ;
 
   @override
 
   Widget build(BuildContext context) {
+    themeProvider = Provider.of(context);
+    languageProvider = Provider.of(context);
     return Scaffold(
-      body: Image.asset(AppImages.splash),
+      body: Image.asset(themeProvider.isDarkThemeEnabled? AppImages.darkSplash:AppImages.splash),
 
     );
   }

@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/extension/extension.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import 'package:todo_app/utils/app_colors.dart';
 import 'package:todo_app/utils/date_time_extension.dart';
 import '../../models/todo_dm.dart';
@@ -22,17 +25,21 @@ class _UpdateTodoState extends State<UpdateTodo> {
   DateTime selectedDate = DateTime.now();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  late ThemeProvider themeProvider;
 
 
   @override
   Widget build(BuildContext context) {
+    themeProvider = Provider.of(context);
     ModalRoute moudalRoute = ModalRoute.of(context)!;
     arg arguments = moudalRoute.settings.arguments! as arg ;
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Todo Edit List'),
+          elevation: 0,
+          title:  Text(context.appLocalizations.todo_edit_list ,
+            style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white :AppColors.black),),
           backgroundColor: AppColors.primary,
         ),
         body: Stack(
@@ -43,7 +50,7 @@ class _UpdateTodoState extends State<UpdateTodo> {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: themeProvider.isDarkThemeEnabled? AppColors.black: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 alignment: Alignment.center,
@@ -54,27 +61,35 @@ class _UpdateTodoState extends State<UpdateTodo> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      "Edit task",
+                      context.appLocalizations.edit_task,
                       textAlign: TextAlign.center,
-                      style: AppStyle.bottomSheetTitle,
-                    ),
+                      style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white :AppColors.black),                    ),
                     TextField(
-                      decoration: InputDecoration(hintText: "This is title"),
+                      style: TextStyle(color: themeProvider.isDarkThemeEnabled? AppColors.white : AppColors.black),
+
+                      decoration: InputDecoration(
+                        hintText: context.appLocalizations.this_is_title,
+                        hintStyle: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white54 :AppColors.black),
+                      ),
                       controller: titleController,
                     ),
                     const SizedBox(
                       height: 12,
                     ),
                     TextField(
-                      decoration: InputDecoration(hintText: "Task details"),
+                      style: TextStyle(color: themeProvider.isDarkThemeEnabled? AppColors.white : AppColors.black),
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white54 :AppColors.black),
+                          hintText: context.appLocalizations.task_details),
                       controller: descriptionController,
                     ),
                     const SizedBox(
                       height: 12,
                     ),
                     Text(
-                      "Select date",
-                      style: AppStyle.bottomSheetTitle.copyWith(fontSize: 16),
+                      context.appLocalizations.selectDate,
+                      style: AppStyle.bottomSheetTitle.copyWith(
+                          fontSize: 16,color:  themeProvider.isDarkThemeEnabled? Colors.white :AppColors.black),
                     ),
                     const SizedBox(
                       height: 12,
@@ -85,7 +100,8 @@ class _UpdateTodoState extends State<UpdateTodo> {
                         },
                         child: Text(
                           selectedDate.toFormattedDate,
-                          style: AppStyle.normalGreyTextStyle,
+                          style: AppStyle.normalGreyTextStyle.copyWith(
+                              color: themeProvider.isDarkThemeEnabled? Colors.white54 :AppColors.black),
                           textAlign: TextAlign.center,
                         )),
                     const Spacer(),
@@ -102,7 +118,10 @@ class _UpdateTodoState extends State<UpdateTodo> {
 
 
                           },
-                          child: const Text("Save Changes"),
+                          child:  Text(context.appLocalizations.save_changes
+                              ,
+                            style: TextStyle(
+                                color: themeProvider.isDarkThemeEnabled? Colors.white :AppColors.black),),
                         style: ButtonStyle(
                           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(

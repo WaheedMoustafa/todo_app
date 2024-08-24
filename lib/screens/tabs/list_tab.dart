@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/extension/extension.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import 'package:todo_app/screens/tabs/todo.dart';
 import 'package:todo_app/screens/tabs/update_todo.dart';
 import 'package:todo_app/utils/args.dart';
@@ -24,6 +27,7 @@ class ListTabState extends State<ListTab> {
   DateTime selectedDate = DateTime.now();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  late ThemeProvider themeProvider;
 
   @override
   void initState() {
@@ -33,6 +37,7 @@ class ListTabState extends State<ListTab> {
 
   @override
   Widget build(BuildContext context) {
+    themeProvider = Provider.of(context);
     return Column(
       children: [
         buildCalendar(),
@@ -48,24 +53,47 @@ class ListTabState extends State<ListTab> {
                   background: Container(
                     height: 365,
                     width: 200,
-                    color: Colors.red,
-                    child: const Column(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(25),
+
+                    ),
+                    child:  Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
                       children: [
                         Icon(Icons.delete , color: Colors.white,size: 60,),
-                        Text('Delete')
+                        Row(
+                          children: [
+                            SizedBox(width: 10,),
+                            Text(context.appLocalizations.delete),
+
+                          ],
+                        )
                       ],
                     ),
                   ),
                   secondaryBackground: Container(
                     height: 365,
                     width: 200,
-                    color: Colors.green,
-                    child: const Column(
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(25),
+
+                    ),                    child:  Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Icon(Icons.edit , color: Colors.white,size: 60,),
-                        Text('Edit')
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(context.appLocalizations.edit,),
+                            SizedBox(width: 10,),
+
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -137,7 +165,7 @@ class ListTabState extends State<ListTab> {
                   )),
               Expanded(
                   child: Container(
-                    color: AppColors.bgColor,
+                    color: themeProvider.isDarkThemeEnabled? AppColors.bgDark :AppColors.bgColor,
                   ))
             ],
           ),
@@ -153,7 +181,7 @@ class ListTabState extends State<ListTab> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: themeProvider.isDarkThemeEnabled? AppColors.black:Colors.white,
                       borderRadius: BorderRadius.circular(22)),
                   child: Column(
                     children: [
@@ -162,14 +190,16 @@ class ListTabState extends State<ListTab> {
                         date.dayName,
                         style: isSelected
                             ? AppStyle.selectedCalendarDayStyle
-                            : AppStyle.unSelectedCalendarDayStyle,
+                            : AppStyle.unSelectedCalendarDayStyle.copyWith(
+                            color: themeProvider.isDarkThemeEnabled? AppColors.white:AppColors.black),
                       ),
                       Spacer(),
                       Text(
                         date.day.toString(),
                         style: isSelected
                             ? AppStyle.selectedCalendarDayStyle
-                            : AppStyle.unSelectedCalendarDayStyle,
+                            : AppStyle.unSelectedCalendarDayStyle.copyWith(
+                            color: themeProvider.isDarkThemeEnabled? AppColors.white:AppColors.black),
                       ),
                       Spacer()
                     ],

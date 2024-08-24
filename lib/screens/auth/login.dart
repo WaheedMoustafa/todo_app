@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/extension/extension.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import 'package:todo_app/screens/auth/register.dart';
 import '../../models/user_dm.dart';
+import '../../utils/app_colors.dart';
 import '../../utils/constant.dart';
 import '../../utils/dialog_utils.dart';
 import '../home.dart';
@@ -19,13 +23,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
+  late ThemeProvider themeProvider;
 
   @override
   Widget build(BuildContext context) {
+    themeProvider=Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Login"),
+        title:  Text(context.appLocalizations.login),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -36,24 +43,26 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * .25,
               ),
-              const Padding(
+               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Welcome back !",
+                  context.appLocalizations.welcomeBack,
                   textAlign: TextAlign.start,
                   style: TextStyle(
                       fontSize: 24,
-                      color: Colors.black,
+                      color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black,
                       fontWeight: FontWeight.bold),
                 ),
               ),
               TextFormField(
+                style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                 onChanged: (text) {
                   email = text;
                 },
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   label: Text(
-                    "Email",
+                    context.appLocalizations.email,
+                    style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                   ),
                 ),
               ),
@@ -61,13 +70,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 8,
               ),
               TextFormField(
+                style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                 onChanged: (text) {
                   password = text;
                 },
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   label: Text(
-                    "Password",
+                    context.appLocalizations.pass,
+                    style: TextStyle(color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                   ),
                 ),
               ),
@@ -78,13 +89,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     signIn();
                   },
-                  child: const Padding(
+                  child:  Padding(
                     padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                     child: Row(
                       children: [
                         Text(
-                          "Login",
-                          style: TextStyle(fontSize: 18),
+                          context.appLocalizations.login,
+                          style: TextStyle(fontSize: 18,
+                              color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                         ),
                         Spacer(),
                         Icon(Icons.arrow_forward)
@@ -98,9 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   Navigator.pushNamed(context, RegisterScreen.routeName);
                 },
-                child: const Text(
-                  "Create account",
-                  style: TextStyle(fontSize: 18, color: Colors.black45),
+                child:  Text(
+                 context.appLocalizations.createAccount,
+                  style: TextStyle(fontSize: 18,
+                      color: themeProvider.isDarkThemeEnabled? Colors.white:AppColors.black),
                 ),
               ),
             ],

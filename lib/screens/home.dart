@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/extension/extension.dart';
+import 'package:todo_app/providers/theme_provider.dart';
 import 'package:todo_app/screens/tabs/add_bottom_sheet.dart';
 import 'package:todo_app/screens/tabs/list_tab.dart';
 import 'package:todo_app/screens/tabs/settings_tab.dart';
@@ -18,6 +21,7 @@ class _HomeState extends State<Home> {
   int currentIndex = 0;
   GlobalKey<ListTabState> listTabKey = GlobalKey();
   List<Widget> tabs = [];
+  late ThemeProvider themeProvider;
 
   @override
   void initState() {
@@ -32,9 +36,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    themeProvider=Provider.of(context);
+
     return Scaffold(
+      backgroundColor: themeProvider.isDarkThemeEnabled ?AppColors.bgDark:AppColors.bgColor,
       appBar: AppBar(
-        title: Text("Welcome ${UserDM.currentUser!.userName}"),
+        elevation: 0,
+        title: Text("${context.appLocalizations.welcome} ${UserDM.currentUser!.userName}"),
       ),
       body: tabs[currentIndex],
       floatingActionButton: buildFab(),
