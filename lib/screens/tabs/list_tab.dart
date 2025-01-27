@@ -81,7 +81,8 @@ class ListTabState extends State<ListTab> {
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(25),
 
-                    ),                    child:  Column(
+                    ),
+                    child:  Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
